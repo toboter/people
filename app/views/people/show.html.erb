@@ -1,0 +1,59 @@
+
+
+<p>
+  <strong>Given name:</strong>
+  <%= @person.given_name %>
+</p>
+
+<p>
+  <strong>First names:</strong>
+  <%= @person.first_names %>
+</p>
+
+<p>
+  <strong>Family name:</strong>
+  <%= @person.family_name %>
+</p>
+
+<p>
+  <strong>Honorific prefix:</strong>
+  <%= @person.honorific_prefix %>
+</p>
+
+<p>
+  <strong>Honorific suffix:</strong>
+  <%= @person.honorific_suffix %>
+</p>
+
+<p>
+  <strong>Gender:</strong>
+  <%= @person.gender %>
+</p>
+
+<p>
+  <strong>Birthday:</strong>
+  <%= @person.birthday %>
+</p>
+
+<p>
+  <strong>Deathday:</strong>
+  <%= @person.deathday %>
+</p>
+
+<p>
+  <strong>About:</strong>
+  <%= @person.about %>
+</p>
+
+<p>
+  <strong>Place of birth:</strong>
+  <%= @person.place_of_birth %>
+</p>
+
+<p>
+  <strong>Place of birth:</strong>
+  <%= @person.profession %>
+</p>
+
+<%= link_to 'Edit', edit_person_path(@person) %> |
+<%= link_to 'Back', people_path %>

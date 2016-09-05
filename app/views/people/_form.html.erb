@@ -1,0 +1,22 @@
+<%= simple_form_for(@person) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :given_name %>
+    <%= f.input :first_names %>
+    <%= f.input :family_name %>
+    <%= f.input :honorific_prefix %>
+    <%= f.input :honorific_suffix %>
+    <%= f.input :gender %>
+    <%= f.input :about %>
+    <%= f.input :profession %>
+    <%= f.input :birthday %>
+    <%= f.input :place_of_birth %>
+    <%= f.input :deathday %>    
+    <%= f.input :place_of_death %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>
