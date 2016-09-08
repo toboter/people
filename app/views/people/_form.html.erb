@@ -1,22 +1,82 @@
-<%= simple_form_for(@person) do |f| %>
+<% content_for(:buttons) do %>
+  <%= link_to person_path(@person), class: 'btn btn-default' do %>
+    <%= fa_icon("eye") %>
+    View
+  <% end unless @person.new_record? %>
+<% end %>
+
+<%= simple_form_for @person, html: { class: 'form-horizontal' },
+  wrapper: :horizontal_form do |f| %>
   <%= f.error_notification %>
 
-  <div class="form-inputs">
-    <%= f.input :given_name %>
-    <%= f.input :first_names %>
-    <%= f.input :family_name %>
-    <%= f.input :honorific_prefix %>
-    <%= f.input :honorific_suffix %>
-    <%= f.input :gender %>
-    <%= f.input :about %>
-    <%= f.input :profession %>
-    <%= f.input :birthday %>
-    <%= f.input :place_of_birth %>
-    <%= f.input :deathday %>    
-    <%= f.input :place_of_death %>
-  </div>
+    <div class="row">
+      <div class="col-md-12">
+        <%= f.input :honorific_prefix, collection: [ "Prof. Dr.", "Dr." ], placeholder: "Prefix" %>
+        <%= f.input :given_name, placeholder: "Given name" %>
+        
+        <%= f.input :family_name, placeholder: "Family name" %>
+        <%= f.input :honorific_suffix, collection: [ "M.A.", "etc" ], placeholder: "Suffix" %>
+  
+        <%= f.input :first_names %>
+        
+        <%= f.input :about, :input_html => {:rows => 6} %>
+        <%= f.input :profession_list, label: 'Professions', collection: Profession.order(name: :asc), label_method: :name, 
+            value_method: :name, selected: @person.professions.map(&:name), 
+            input_html: {multiple: true, id: 'profession_list'} %>
+      </div>
+    </div>
+    <hr>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-md-12">
+          <%= f.input :birthday, label: 'Date of birth', as: :date, include_blank: true, start_year: 1830, end_year: Date.today.year-12, order: [:day, :month, :year] %>
+        </div>
+        <%= f.input :place_of_birth, placeholder: 'Place' %>
+        <%= f.input :gender, collection: [ "male", "female" ] %>
+        <div class="col-md-12">
+          <%= f.input :deathday, label: 'Day of death', as: :date, include_blank: true, start_year: 1900, end_year: Date.today.year, order: [:day, :month, :year] %>    
+        </div>
+        <%= f.input :place_of_death %>
+      </div>
+    </div>
+    <hr>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <div id="links">
+          <strong>Links: </strong>
+          <%= f.simple_fields_for :links do |id| %>
+            <%= render 'link_fields', f: id %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association fa_icon('plus-square', text: 'add link'), f, :links %>
+          </div>
+        </div>
 
-  <div class="form-actions">
-    <%= f.button :submit %>
-  </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div id="participations">
+          <strong>Participations: </strong>
+          <%= f.simple_fields_for :participations do |id| %>
+            <%= render 'participation_fields', f: id %>
+          <% end %>
+          <div class="participations">
+            <%= link_to_add_association fa_icon('plus-square', text: 'add participation'), f, :participations %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-md-6">
+        <hr>
+        <%= f.submit class: 'btn btn-default' %>
+      </div>
+    </div>
+
 <% end %>

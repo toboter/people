@@ -1,2 +1,29 @@
-<h1>Home#api</h1>
-<p>Find me in app/views/home/api.html.erb</p>
+<% title "API Description" %>
+
+<p>For all people <code>/api/people.json</code></p>
+<p>For a specific person <code>/api/people/'id'.json</code></p>
+<p>To search for people as described <%= link_to 'here', help_path(anchor: 'searching') %> <code>/api/people/search.json?q=attribute:value</code>
+
+<p>A call will result in json format. All info is public.</p>
+
+<br>
+<h5>Example output</h5>
+<pre>
+{
+  given_name: "Robert",
+  family_name: "Koldewey",
+  first_names: "Johannes Gustav Eduard Robert",
+  honorific_prefix: "",
+  honorific_suffix: "",
+  gender: "male",
+  birthday: "2016-09-10T17:35:00.000Z",
+  deathday: "2016-02-04T17:35:00.000Z",
+  about: "Johannes Gustav Eduard Robert Koldewey (* 10. September 1855 in Blankenburg (Harz), Herzogtum Braunschweig; † 4. Februar 1925 in Berlin) war ein deutscher Architekt und Bauforscher und einer der bedeutendsten deutschen Vertreter der Vorderasiatischen Archäologie. Er gilt, unter anderem zusammen mit Wilhelm Dörpfeld, als Begründer der modernen archäologischen Bauforschung.",
+  place_of_birth: "Blankenburg",
+  place_of_death: "Berlin",
+  links: {
+    self: "http://localhost:3002/api/people/robert-koldewey",
+    human: "http://localhost:3002/people/robert-koldewey"
+  }
+}
+</pre>

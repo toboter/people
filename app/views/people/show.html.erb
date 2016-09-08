@@ -1,59 +1,130 @@
+<% title "#{@person.display_name}" %>
+
+<% content_for(:buttons) do %>
+  <%= link_to edit_person_path(@person), class: 'btn btn-default' do %>
+    <%= fa_icon("edit") %>
+    <%= "Edit" %>
+  <% end %>
+  <%= link_to @person, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
+    <%= fa_icon("remove") %>
+    <%= "Delete" %>
+  <% end %>
+<% end if current_user %>
+
+<div class="person">
+  <div class="row">
+    <div class="col-md-8">
+      <div id="core-data" class="data-element">
+        <h3><%= @person.full_name %></h3>
+        <p>
+          <%=  fa_icon(@person.gender) if @person.gender %> 
+          <%= "* #{@person.birthday.to_formatted_s(:long_ordinal)} (#{@person.place_of_birth})" if @person.birthday %>
+          <%= ", &dagger; #{@person.deathday.to_formatted_s(:long_ordinal)} (#{@person.place_of_death})".html_safe if @person.deathday %>
+        </p>
+        
+        <%= content_tag :p, @person.about if @person.about %>
+        
+        <p>
+          <strong>Profession:</strong>
+          <%= @person.profession_list %>
+        </p>
+      </div>
+    </div>
+    
+    <%= content_tag "div", class: 'col-md-4', id: "wikimedia", data: {url: @wiki_url } do %>
+
+      <div class="thumbnail" style="display:none;" id="wikimedia-thumbnail-frame">
+        <img id="wikimedia-thumbnail">
+        <div class="caption" id="wikimedia-thumbnail-caption">
+          
+        </div>
+      </div>
+    <% end %>
+  </div>
+  
+  <div id="literature-data" class="data-element">
+    <h4>Literature by <%= @person.display_name %> on babylon-online.org</h4>
+    <% if @creatorship.present? %>
+      <table class="table table-bordered table-responsive">
+        <thead>
+          <tr>
+            <th>Citation</th>
+            <th>Title <span class="badge pull-right">Total <%= @creatorship.count %></span></th>
+          </tr>
+        </thead>
+      
+        <tbody>
+          <% @creatorship.take(5).each do |entry| %>
+            <tr>
+              <td>
+                <%= link_to "#{entry['cite']}", entry['links']['human'], target: 'blank' %><br/>
+                <small><%= entry['type'] %></small>
+              </td>
+              <td>
+                <%= entry['full_entry'] %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      Look for more on <%= link_to 'literature.babylon-online.org', @creatorship_url %>
+    <% else %>
+      <p>nothing found</p>
+    <% end %>
+    
+    <h4>Literature tagged with <%= @person.display_name %> on babylon-online.org</h4>
+    <% if @mentions.present? %>
+      <table class="table table-bordered table-responsive">
+        <thead>
+          <tr>
+            <th>Citation</th>
+            <th>Title <span class="badge pull-right">Total <%= @mentions.count %></span></th>
+          </tr>
+        </thead>
+      
+        <tbody>
+          <% @mentions.take(5).each do |entry| %>
+            <tr>
+              <td>
+                <%= link_to "#{entry['cite']}", entry['links']['human'], target: 'blank' %><br/>
+                <small><%= entry['type'] %></small>
+              </td>
+              <td>
+                <%= entry['full_entry'] %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      Look for more on <%= link_to 'literature.babylon-online.org', @mentions_url %>
+    <% else %>
+      <p>nothing found</p>
+    <% end %>
+  </div>
+  
+  <div id="links" class="list-group">
+    <% @person.links.each do |l| %>
+      <%= link_to l.url, l.url, class: 'list-group-item', target: :blank %>
+    <% end %>
+  </div>
+  
+</div>
 
 
-<p>
-  <strong>Given name:</strong>
-  <%= @person.given_name %>
-</p>
 
-<p>
-  <strong>First names:</strong>
-  <%= @person.first_names %>
-</p>
 
-<p>
-  <strong>Family name:</strong>
-  <%= @person.family_name %>
-</p>
-
-<p>
-  <strong>Honorific prefix:</strong>
-  <%= @person.honorific_prefix %>
-</p>
-
-<p>
-  <strong>Honorific suffix:</strong>
-  <%= @person.honorific_suffix %>
-</p>
-
-<p>
-  <strong>Gender:</strong>
-  <%= @person.gender %>
-</p>
-
-<p>
-  <strong>Birthday:</strong>
-  <%= @person.birthday %>
-</p>
-
-<p>
-  <strong>Deathday:</strong>
-  <%= @person.deathday %>
-</p>
-
-<p>
-  <strong>About:</strong>
-  <%= @person.about %>
-</p>
-
-<p>
-  <strong>Place of birth:</strong>
-  <%= @person.place_of_birth %>
-</p>
-
-<p>
-  <strong>Place of birth:</strong>
-  <%= @person.profession %>
-</p>
-
-<%= link_to 'Edit', edit_person_path(@person) %> |
-<%= link_to 'Back', people_path %>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+  return jQuery.ajax({
+    type: "get",
+    url: $("#wikimedia").data("url"),
+    dataType: "json",
+    success: function(data) {
+      $("#wikimedia-thumbnail-frame").show(data.thumbnail.source);
+      $("#wikimedia-thumbnail-caption").append("<h4>" + data.title + "</h4>");
+      $("#wikimedia-thumbnail-caption").append("<p>Image data from <a href=" + data.thumbnail.source + ">Wikipedia</a>.</p>");
+      $("#wikimedia-thumbnail").attr("src", data.thumbnail.source);
+    }
+  });
+});
+</script>

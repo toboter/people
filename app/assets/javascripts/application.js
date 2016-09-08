@@ -17,3 +17,11 @@
 //= require select2-full
 //= require cocoon
 //= require_tree .
+
+$(document).ready(function() {
+  $("#profession_list").select2({
+    tags: true,
+    tokenSeparators: [','],
+    theme: "bootstrap"
+  });
+});

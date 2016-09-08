@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  person: one
+  from: 2016-09-08
+  to: 2016-09-08
+  competence: MyString
+  comment: MyText
+
+two:
+  person: two
+  from: 2016-09-08
+  to: 2016-09-08
+  competence: MyString
+  comment: MyText

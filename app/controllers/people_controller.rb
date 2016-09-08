@@ -1,15 +1,25 @@
 class PeopleController < ApplicationController
   before_action :set_person, only: [:show, :edit, :update, :destroy]
-
+  before_action :authorize, except: [:index, :show]
+  
   # GET /people
   # GET /people.json
   def index
-    @people = Person.all
+    @people = Person.search(params[:q]).order(family_name: :asc).paginate(:page => params[:page], :per_page => 10)
   end
 
   # GET /people/1
   # GET /people/1.json
   def show
+    @creatorship_url = "http://localhost:3001/api/citations/search.json?q=creator=#{@person.family_name}"
+    @resp = Net::HTTP.get_response(URI.parse(@creatorship_url))
+    @creatorship = JSON.parse(@resp.body)
+    @mentions_url = "http://localhost:3001/api/citations/search.json?q=tag:#{@person.family_name} OR tag:#{@person.display_name}"
+    @resp = Net::HTTP.get_response(URI.parse(@mentions_url))
+    @mentions = JSON.parse(@resp.body)
+    
+    wiki_id = Link.where(person: @person, name: 'wikipedia.org').first
+    @wiki_url = wiki_id ? "https://de.wikipedia.org/api/rest_v1/page/summary/#{wiki_id.url.split('/').last}" : nil
   end
 
   # GET /people/new
@@ -64,11 +74,14 @@ class PeopleController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_person
-      @person = Person.find(params[:id])
+      @person = Person.friendly.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def person_params
-      params.require(:person).permit(:given_name, :first_names, :family_name, :honorific_prefix, :honorific_suffix, :gender, :birthday, :deathday, :about, :place_of_birth, :place_of_death, :profession)
+      params.require(:person).permit(:given_name, :first_names, :family_name, :honorific_prefix, 
+        :honorific_suffix, :gender, :birthday, :deathday, :about, :place_of_birth, :place_of_death, 
+        :profession_list => [], links_attributes: [:id, :url, :name, :_destroy], 
+        participations_attributes: [:id, :_destroy, :from, :till, :competence, :comment])
     end
 end
