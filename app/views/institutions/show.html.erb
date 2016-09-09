@@ -1,0 +1,50 @@
+<% title "#{@institution.name}" %>
+
+<% content_for(:buttons) do %>
+  <%= link_to edit_institution_path(@institution), class: 'btn btn-default' do %>
+    <%= fa_icon("edit") %>
+    <%= "Edit" %>
+  <% end %>
+  <%= link_to @institution, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
+    <%= fa_icon("remove") %>
+    <%= "Delete" %>
+  <% end %>
+<% end if current_user %>
+
+<div class="row institution">
+  <div class="col-md-7">
+    <ul class="data-element">
+      <%= content_tag :li, link_to(@institution.root.try(:name), @institution.root), style: ('font-weight: bold;' if @institution.root?) %>
+      <%= render 'tree', :institution => @institution.root, :tag => 'li', :indent => 20 %>
+    </ul>
+
+    <%= content_tag :div, id: "link" do %>
+      <h4>External link</h4>
+      <%= content_tag :div, class: "list-group" do %>
+        <%= link_to @institution.url, @institution.url, class: 'list-group-item', target: :blank %>
+      <% end %>
+    <% end if @institution.url.present? %>
+    
+    
+    
+    <%= @institution.affiliations.inspect %>
+  </div>
+
+  <div class="col-md-5">
+    <div class="well" id="vcard">
+      <p><%= @institution.self_and_ancestors.map(&:name).join('<br>').html_safe %></p>
+
+      <p>
+        <%= @institution.street %><br>
+        <%= @institution.zip %> <%= @institution.city %>
+        <%= @institution.country %>
+      </p>
+           
+      <p>
+        <%= "<strong>Phone:</strong> #{@institution.phone}".html_safe if @institution.phone.present? %>
+        <%= "<strong>Fax:</strong> #{@institution.fax}".html_safe if @institution.fax.present? %>
+      </p>
+
+    </div>
+  </div>
+</div>

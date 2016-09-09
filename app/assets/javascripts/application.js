@@ -24,4 +24,19 @@ $(document).ready(function() {
     tokenSeparators: [','],
     theme: "bootstrap"
   });
+  $("#institution_parent_id").select2({
+    theme: "bootstrap",
+    placeholder: "Select a parent institution",
+    allowClear: true
+  });
+  $("#institution_country").select2({
+    theme: "bootstrap",
+    placeholder: "Select a country",
+    allowClear: true
+  });
+  $("#person_affiliation_institution_id").select2({
+    theme: "bootstrap",
+    placeholder: "Select a institution",
+    allowClear: true
+  });
 });

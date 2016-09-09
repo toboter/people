@@ -71,7 +71,22 @@
 
       </div>
     </div>
-  
+    
+    <div class="row">
+      <div class="col-md-12">
+        <div id="affiliations">
+          <strong>Affiliations: </strong>
+          <%= f.simple_fields_for :affiliations do |id| %>
+            <%= render 'affiliation_fields', f: id %>
+          <% end %>
+          <div class="affiliations">
+            <%= link_to_add_association fa_icon('plus-square', text: 'add affiliation'), f, :affiliations %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    
     <div class="row">
       <div class="col-md-6">
         <hr>

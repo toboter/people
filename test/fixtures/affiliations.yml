@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  person: one
+  institution: one
+  from: 2016-09-09
+  till: 2016-09-09
+
+two:
+  person: two
+  institution: two
+  from: 2016-09-09
+  till: 2016-09-09

@@ -82,6 +82,6 @@ class PeopleController < ApplicationController
       params.require(:person).permit(:given_name, :first_names, :family_name, :honorific_prefix, 
         :honorific_suffix, :gender, :birthday, :deathday, :about, :place_of_birth, :place_of_death, 
         :profession_list => [], links_attributes: [:id, :url, :name, :_destroy], 
-        participations_attributes: [:id, :_destroy, :from, :till, :competence, :comment])
+        participations_attributes: [:id, :_destroy, :from, :till, :competence, :comment], affiliations_attributes: [:id, :_destroy, :from, :till, :institution_id])
     end
 end

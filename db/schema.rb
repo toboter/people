@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160908132601) do
+ActiveRecord::Schema.define(version: 20160909080754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "affiliations", force: :cascade do |t|
+    t.integer  "person_id"
+    t.integer  "institution_id"
+    t.date     "from"
+    t.date     "till"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["institution_id"], name: "index_affiliations_on_institution_id", using: :btree
+    t.index ["person_id"], name: "index_affiliations_on_person_id", using: :btree
+  end
 
   create_table "friendly_id_slugs", force: :cascade do |t|
     t.string   "slug",                      null: false
@@ -25,6 +36,30 @@ ActiveRecord::Schema.define(version: 20160908132601) do
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", using: :btree
     t.index ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
     t.index ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
+  end
+
+  create_table "institution_hierarchies", id: false, force: :cascade do |t|
+    t.integer "ancestor_id",   null: false
+    t.integer "descendant_id", null: false
+    t.integer "generations",   null: false
+    t.index ["ancestor_id", "descendant_id", "generations"], name: "institution_anc_desc_idx", unique: true, using: :btree
+    t.index ["descendant_id"], name: "institution_desc_idx", using: :btree
+  end
+
+  create_table "institutions", force: :cascade do |t|
+    t.string   "name"
+    t.string   "phone"
+    t.string   "fax"
+    t.string   "url"
+    t.string   "street"
+    t.string   "zip"
+    t.string   "city"
+    t.string   "country"
+    t.string   "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "parent_id"
+    t.index ["slug"], name: "index_institutions_on_slug", unique: true, using: :btree
   end
 
   create_table "links", force: :cascade do |t|
@@ -91,6 +126,8 @@ ActiveRecord::Schema.define(version: 20160908132601) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "affiliations", "institutions"
+  add_foreign_key "affiliations", "people"
   add_foreign_key "links", "people"
   add_foreign_key "participations", "people"
   add_foreign_key "proficiencies", "people"

@@ -3,7 +3,7 @@
     <%= render "shared/search" %>
   </div>
   <div class="col-md-12">
-    <%= will_paginate @subjects, renderer: BootstrapPagination::Rails %>
+    <%= will_paginate @people, renderer: BootstrapPagination::Rails %>
     <%= content_tag :div, class: 'pull-right' do %>
       <%= link_to 'New Person', new_person_path, class: 'btn btn-default', style: 'margin-bottom: 10px;' %>
     <% end if current_user %>

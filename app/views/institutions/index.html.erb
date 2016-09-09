@@ -1,0 +1,24 @@
+<div class="row">
+
+  <div class="col-md-12">
+
+    <%= content_tag :div, class: 'pull-right' do %>
+      <%= link_to 'New Institution ', new_institution_path, class: 'btn btn-default', style: 'margin-bottom: 10px;' %>
+    <% end if current_user %>
+  </div>
+</div>
+
+<table class="table table-bordered table-responsive">
+  <tbody>
+    <% @institutions.each do |institution| %>
+      <tr>      
+        <td>
+          <ul>
+            <strong><%= link_to institution.name, institution %></strong>
+            <%= render 'tree', :institution => institution, :tag => 'li', :indent => 15 %>
+          </ul>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

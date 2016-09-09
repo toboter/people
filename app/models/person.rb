@@ -12,10 +12,13 @@ class Person < ApplicationRecord
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
   has_many :participations, dependent: :destroy
   accepts_nested_attributes_for :participations, reject_if: :all_blank, allow_destroy: true
+  has_many :affiliations, dependent: :destroy
+  has_many :institutions, through: :affiliations
+  accepts_nested_attributes_for :affiliations, allow_destroy: true
   
   search_scope :search do
-    attributes :first_names, :family_name, :profession
-    
+    attributes :first_names, :family_name, :given_name
+    attributes :profession => "professions.name"
     #attributes :creator => ["creators.lname", "creators.fname"]
     #attributes :tag => "tags.name"
   end

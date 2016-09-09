@@ -29,8 +29,55 @@
           <%= @person.profession_list %>
         </p>
       </div>
+      <%= content_tag :div, id: "participation-data", class: "data-element" do %>
+        <h4>Excavation participation</h4>
+        <table class="table table-bordered table-responsive">
+          <thead>
+            <tr>
+              <th>Since</th>
+              <th>till</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+        
+          <tbody>
+            <% @person.participations.order(from: :desc).each do |participation| %>
+              <tr>
+                <td><%= participation.from %></td>
+                <td><%= participation.till %></td>
+                <td><%= participation.competence %></td>
+                <td><%= participation.comment %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end if @person.participations.any? %>
+      
+      <%= content_tag :div, id: "affiliation-data", class: "data-element" do %>
+        <h4>Institution affiliations</h4>
+        <table class="table table-bordered table-responsive">
+          <thead>
+            <tr>
+              <th>Institution</th>
+              <th>from</th>
+              <th>till</th>
+            </tr>
+          </thead>
+        
+          <tbody>
+            <% @person.affiliations.order(from: :desc).each do |affiliation| %>
+              <tr>
+                <td><%= link_to affiliation.institution.try(:name), affiliation.institution %></td>
+                <td><%= affiliation.from %></td>
+                <td><%= affiliation.till %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end if @person.affiliations.any? %> 
     </div>
-    
+
     <%= content_tag "div", class: 'col-md-4', id: "wikimedia", data: {url: @wiki_url } do %>
 
       <div class="thumbnail" style="display:none;" id="wikimedia-thumbnail-frame">
@@ -102,11 +149,14 @@
     <% end %>
   </div>
   
-  <div id="links" class="list-group">
-    <% @person.links.each do |l| %>
-      <%= link_to l.url, l.url, class: 'list-group-item', target: :blank %>
+  <%= content_tag :div do %>
+    <h4>External links</h4>
+    <%= content_tag :div, id: "links", class: "list-group" do %>
+      <% @person.links.each do |l| %>
+        <%= link_to l.url, l.url, class: 'list-group-item', target: :blank %>
+      <% end %>
     <% end %>
-  </div>
+  <% end if @person.links.any? %>
   
 </div>
 

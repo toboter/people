@@ -49,6 +49,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'simple_form'
+gem 'country_select'
 gem 'friendly_id'
 gem "select2-rails"     # https://select2.github.io/examples.html
 gem "font-awesome-rails"
@@ -57,5 +58,7 @@ gem 'will_paginate-bootstrap'
 gem 'omniauth-oauth2'
 gem 'active_model_serializers', '~> 0.10.0'
 gem 'search_cop'        # https://github.com/mrkamel/search_cop
+
+gem 'closure_tree' 
 
 ruby '2.3.1'
