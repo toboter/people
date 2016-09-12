@@ -11,6 +11,7 @@ class InstitutionsController < ApplicationController
   # GET /institutions/1
   # GET /institutions/1.json
   def show
+    @associates = Person.joins(:affiliations).where('affiliations.institution_id IN (?)', @institution.self_and_descendant_ids)
   end
 
   # GET /institutions/new

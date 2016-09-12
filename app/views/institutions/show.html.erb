@@ -18,16 +18,22 @@
       <%= render 'tree', :institution => @institution.root, :tag => 'li', :indent => 20 %>
     </ul>
 
-    <%= content_tag :div, id: "link" do %>
+    <%= content_tag :div, id: "link", class:'data-element' do %>
       <h4>External link</h4>
       <%= content_tag :div, class: "list-group" do %>
         <%= link_to @institution.url, @institution.url, class: 'list-group-item', target: :blank %>
       <% end %>
     <% end if @institution.url.present? %>
     
-    
-    
-    <%= @institution.affiliations.inspect %>
+    <%= content_tag :div, id: "associated-people", class: 'data-element' do %>
+      <h4>Associated People</h4>
+      <%= content_tag :div, class: "list-group" do %>
+        <% for person in @associates do %>
+        
+          <%= link_to person.full_name, person, class: 'list-group-item' %>
+        <% end %>
+      <% end %>
+    <% end if @associates.any? %>
   </div>
 
   <div class="col-md-5">

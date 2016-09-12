@@ -28,7 +28,7 @@ class Person < ApplicationRecord
   end
 
   def full_name
-  	"#{honorific_prefix} #{first_names ? first_names : given_name} #{family_name} #{honorific_suffix}"
+  	"#{honorific_prefix} #{first_names.present? ? first_names : given_name} #{family_name} #{honorific_suffix}"
   end
   
   def profession_list

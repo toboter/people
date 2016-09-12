@@ -15,4 +15,5 @@ class Institution < ApplicationRecord
   def self.possible_parents(institution)
     possible_parents = all-institution.self_and_descendants
   end
+  
 end

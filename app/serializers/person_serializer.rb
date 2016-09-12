@@ -1,12 +1,15 @@
 class PersonSerializer < ActiveModel::Serializer
   include Rails.application.routes.url_helpers
   
-  attributes :given_name, :family_name, :first_names, :honorific_prefix, :honorific_suffix 
-  attributes :gender, :birthday, :deathday, :about, :place_of_birth, :place_of_death
+  attributes :type, :given_name, :family_name, :first_names, :honorific_prefix, :honorific_suffix 
+  attributes :gender, :birthday, :deathday, :about, :place_of_birth, :place_of_death, :display_name
   attributes :links
   has_many :professions
   attributes :professions
   
+  def type
+    object.class.name
+  end
   
   def links
     {
