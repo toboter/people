@@ -11,10 +11,10 @@ class PeopleController < ApplicationController
   # GET /people/1
   # GET /people/1.json
   def show
-    @creatorship_url = "http://localhost:3001/api/citations/search.json?q=creator=#{@person.family_name}"
+    @creatorship_url = "#{Rails.application.secrets.literature_host}/api/citations/search.json?q=creator=#{@person.family_name}"
     @resp = Net::HTTP.get_response(URI.parse(@creatorship_url))
     @creatorship = JSON.parse(@resp.body)
-    @mentions_url = "http://localhost:3001/api/citations/search.json?q=tag:#{@person.family_name} OR tag:#{@person.display_name}"
+    @mentions_url = "#{Rails.application.secrets.literature_host}/api/citations/search.json?q=tag:#{@person.family_name} OR tag:#{@person.display_name}"
     @resp = Net::HTTP.get_response(URI.parse(@mentions_url))
     @mentions = JSON.parse(@resp.body)
     
