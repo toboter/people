@@ -5,21 +5,21 @@ class PeopleController < ApplicationController
   # GET /people
   # GET /people.json
   def index
-    @people = Person.search(params[:q]).order(family_name: :asc).paginate(:page => params[:page], :per_page => 10)
+    @people = Person.search(params[:q]).order(family_name: :asc).paginate(:page => params[:page], :per_page => 20)
   end
 
   # GET /people/1
   # GET /people/1.json
   def show
-    @creatorship_url = "#{Rails.application.secrets.literature_host}/api/citations/search.json?q=creator=#{@person.family_name}"
+    @creatorship_url = "#{Rails.application.secrets.literature_host}/api/citations/search.json?q=#{({creator: @person.family_name}.to_query)}"
     @resp = Net::HTTP.get_response(URI.parse(@creatorship_url))
     @creatorship = JSON.parse(@resp.body)
-    @mentions_url = "#{Rails.application.secrets.literature_host}/api/citations/search.json?q=tag:#{@person.family_name} OR tag:#{@person.display_name}"
+    @mentions_url = "#{Rails.application.secrets.literature_host}/api/citations/search.json?q=#{({tag: @person.family_name}.to_query)} OR #{({tag: @person.display_name}.to_query)}"
     @resp = Net::HTTP.get_response(URI.parse(@mentions_url))
     @mentions = JSON.parse(@resp.body)
     
     wiki_id = Link.where(person: @person, name: 'wikipedia.org').first
-    @wiki_url = wiki_id ? "https://de.wikipedia.org/api/rest_v1/page/summary/#{wiki_id.url.split('/').last}" : nil
+    @wiki_url = wiki_id ? "https://de.wikipedia.org/api/rest_v1/page/summary/#{wiki_id.url.split('/').last}".to_param : nil
   end
 
   # GET /people/new
