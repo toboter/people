@@ -101,7 +101,7 @@
         </thead>
       
         <tbody>
-          <% @creatorship.take(5).each do |entry| %>
+          <% @creatorship.sort_by{|c| [c['published_date'], c['cite']]}.reverse.take(5).each do |entry| %>
             <tr>
               <td>
                 <%= link_to "#{entry['cite']}", entry['links']['human'], target: 'blank' %><br/>
@@ -114,7 +114,7 @@
           <% end %>
         </tbody>
       </table>
-      Look for more on <%= link_to 'literature.babylon-online.org', @creatorship_url %>
+      Look for more on <%= link_to 'literature.babylon-online.org', "#{Rails.application.secrets.literature_host}/subjects?q=#{({creator: @person.family_name}.to_query)}" %>
     <% else %>
       <p>nothing found</p>
     <% end %>
@@ -130,7 +130,7 @@
         </thead>
       
         <tbody>
-          <% @mentions.take(5).each do |entry| %>
+          <% @mentions.sort_by{|c| [c['published_date'], c['cite']]}.reverse.take(5).each do |entry| %>
             <tr>
               <td>
                 <%= link_to "#{entry['cite']}", entry['links']['human'], target: 'blank' %><br/>
@@ -143,7 +143,7 @@
           <% end %>
         </tbody>
       </table>
-      Look for more on <%= link_to 'literature.babylon-online.org', @mentions_url %>
+      Look for more on <%= link_to 'literature.babylon-online.org', "#{Rails.application.secrets.literature_host}/subjects?q=#{({tag: @person.family_name}.to_query)} OR #{({tag: @person.display_name}.to_query)}" %>
     <% else %>
       <p>nothing found</p>
     <% end %>

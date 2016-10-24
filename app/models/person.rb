@@ -18,17 +18,16 @@ class Person < ApplicationRecord
   
   search_scope :search do
     attributes :first_names, :family_name, :given_name
-    attributes :profession => "professions.name"
-    #attributes :creator => ["creators.lname", "creators.fname"]
-    #attributes :tag => "tags.name"
+    attributes :professions => "professions.name"
+    attributes :institutions => "institutions.name"
   end
 
   def display_name
   	"#{given_name} #{family_name}"
   end
 
-  def full_name
-  	"#{honorific_prefix} #{first_names.present? ? first_names : given_name} #{family_name} #{honorific_suffix}"
+  def full_name(full=true)
+  	"#{honorific_prefix} #{first_names.present? && full ? first_names : given_name} #{family_name} #{honorific_suffix}"
   end
   
   def profession_list
