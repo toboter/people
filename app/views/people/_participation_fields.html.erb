@@ -1,7 +1,9 @@
 <div class="nested-fields row">
   <div class="col-md-10">
-    <%= f.input :from, as: :date, include_blank: true, start_year: 1897, end_year: 1917, order: [:day, :month, :year] %>
-    <%= f.input :till, as: :date, include_blank: true, start_year: 1897, end_year: 1917, order: [:day, :month, :year] %>
+    <div class="col-md-12">
+      <%= f.input :from, as: :date, include_blank: true, start_year: 1897, end_year: 1917, order: [:day, :month, :year] %>
+      <%= f.input :till, as: :date, include_blank: true, start_year: 1897, end_year: 1917, order: [:day, :month, :year] %>
+    </div>
 	<%= f.input :competence %>
 	<%= f.input :comment %>
   </div>

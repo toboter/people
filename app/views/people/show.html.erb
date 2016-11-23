@@ -77,21 +77,17 @@
         </table>
       <% end if @person.affiliations.any? %> 
     </div>
-
-    <%= content_tag "div", class: 'col-md-4', id: "wikimedia", data: {url: @wiki_url } do %>
-
-      <div class="thumbnail" style="display:none;" id="wikimedia-thumbnail-frame">
-        <img id="wikimedia-thumbnail">
-        <div class="caption" id="wikimedia-thumbnail-caption">
-          
-        </div>
-      </div>
+  
+    <%= content_tag "div", class: 'col-md-4', id: "portrait" do %>
+      <% @portraits.take(1).each do |img| %>
+        <%= render 'media_thumbnail', img: img %>
+      <% end %>
     <% end %>
   </div>
   
   <div id="literature-data" class="data-element">
-    <h4>Literature by <%= @person.display_name %> on babylon-online.org</h4>
-    <% if @creatorship.present? %>
+    <%= content_tag :div, id: 'literature-by' do %>
+      <h3>Literature by <%= @person.display_name %> on babylon-online.org</h3>
       <table class="table table-bordered table-responsive">
         <thead>
           <tr>
@@ -115,12 +111,10 @@
         </tbody>
       </table>
       Look for more on <%= link_to 'literature.babylon-online.org', "#{Rails.application.secrets.literature_host}/subjects?q=#{({creator: @person.family_name}.to_query)}" %>
-    <% else %>
-      <p>nothing found</p>
-    <% end %>
+    <% end if @creatorship.present? %>
     
-    <h4>Literature tagged with <%= @person.display_name %> on babylon-online.org</h4>
-    <% if @mentions.present? %>
+    <%= content_tag :div, id: 'literature-mentions' do %>
+      <h3>Literature tagged with <%= @person.display_name %> on babylon-online.org</h3>
       <table class="table table-bordered table-responsive">
         <thead>
           <tr>
@@ -144,37 +138,27 @@
         </tbody>
       </table>
       Look for more on <%= link_to 'literature.babylon-online.org', "#{Rails.application.secrets.literature_host}/subjects?q=#{({tag: @person.family_name}.to_query)} OR #{({tag: @person.display_name}.to_query)}" %>
-    <% else %>
-      <p>nothing found</p>
-    <% end %>
+    <% end if @mentions.present? %>
   </div>
   
-  <%= content_tag :div do %>
-    <h4>External links</h4>
+  <%= content_tag :div, id: 'links', class: 'data-element' do %>
+    <h3>External links</h3>
     <%= content_tag :div, id: "links", class: "list-group" do %>
       <% @person.links.each do |l| %>
-        <%= link_to l.url, l.url, class: 'list-group-item', target: :blank %>
+        <%= link_to l.url, l.url, class: 'list-group-item', target: :_blank %>
       <% end %>
     <% end %>
   <% end if @person.links.any? %>
   
+  <%= content_tag :div, id: 'images', class: 'data-element' do %>
+    <h3>Pictures tagged with <%= @person.display_name %></h3>
+    <div class="row">
+      <% @images.take(9).each do |img| %>
+        <%= content_tag "div", class: 'col-md-4', id: "image" do %>
+          <%= render 'media_thumbnail', img: img %>
+        <% end %>
+      <% end %>
+    </div>
+    <%= content_tag :span, "9 out of #{@images.count}. Look for more on #{link_to 'media.babylon-online.org', URI.encode("#{Rails.application.secrets.media_host}/subjects?q=#{@person.display_name}")}" if @images.count > 8 %>
+  <% end if @images.present? %>
 </div>
-
-
-
-
-<script type="text/javascript">
-jQuery(document).ready(function($) {
-  return jQuery.ajax({
-    type: "get",
-    url: $("#wikimedia").data("url"),
-    dataType: "json",
-    success: function(data) {
-      $("#wikimedia-thumbnail-frame").show(data.thumbnail.source);
-      $("#wikimedia-thumbnail-caption").append("<h4>" + data.title + "</h4>");
-      $("#wikimedia-thumbnail-caption").append("<p>Image data from <a href=" + data.thumbnail.source + ">Wikipedia</a>.</p>");
-      $("#wikimedia-thumbnail").attr("src", data.thumbnail.source);
-    }
-  });
-});
-</script>

@@ -44,21 +44,6 @@
     
     <div class="row">
       <div class="col-md-12">
-        <div id="links">
-          <strong>Links: </strong>
-          <%= f.simple_fields_for :links do |id| %>
-            <%= render 'link_fields', f: id %>
-          <% end %>
-          <div class="links">
-            <%= link_to_add_association fa_icon('plus-square', text: 'add link'), f, :links %>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-12">
         <div id="participations">
           <strong>Participations: </strong>
           <%= f.simple_fields_for :participations do |id| %>
@@ -71,6 +56,7 @@
 
       </div>
     </div>
+    <hr>
     
     <div class="row">
       <div class="col-md-12">
@@ -86,7 +72,24 @@
 
       </div>
     </div>
-    
+    <hr>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div id="links">
+          <strong>Links: </strong>
+          <%= f.simple_fields_for :links do |id| %>
+            <%= render 'link_fields', f: id %>
+          <% end %>
+          <div class="links">
+            <%= link_to_add_association fa_icon('plus-square', text: 'add link'), f, :links %>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+        
     <div class="row">
       <div class="col-md-6">
         <hr>

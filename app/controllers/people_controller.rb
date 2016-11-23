@@ -14,9 +14,18 @@ class PeopleController < ApplicationController
     @creatorship_url = "#{Rails.application.secrets.literature_host}/api/citations/search.json?q=#{({creator: @person.family_name}.to_query)}"
     @resp = Net::HTTP.get_response(URI.parse(@creatorship_url))
     @creatorship = JSON.parse(@resp.body)
+    
     @mentions_url = "#{Rails.application.secrets.literature_host}/api/citations/search.json?q=#{({tag: @person.family_name}.to_query)} OR #{({tag: @person.display_name}.to_query)}"
     @resp = Net::HTTP.get_response(URI.parse(@mentions_url))
     @mentions = JSON.parse(@resp.body)
+
+    @images_url = URI.encode("#{Rails.application.secrets.media_host}/api/media/search?q=#{@person.display_name}")
+    @resp = Net::HTTP.get_response(URI.parse(@images_url))
+    @images = JSON.parse(@resp.body)
+       
+    @portraits_url = URI.encode("#{Rails.application.secrets.media_host}/api/media/search?q=#{@person.display_name + ',Portrait'}")
+    @resp = Net::HTTP.get_response(URI.parse(@portraits_url))
+    @portraits = JSON.parse(@resp.body)
     
     wiki_id = Link.where(person: @person, name: 'wikipedia.org').first
     @wiki_url = wiki_id ? "https://de.wikipedia.org/api/rest_v1/page/summary/#{wiki_id.url.split('/').last}".to_param : nil
