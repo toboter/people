@@ -23,7 +23,7 @@ class PeopleController < ApplicationController
     @resp = Net::HTTP.get_response(URI.parse(@images_url))
     @images = JSON.parse(@resp.body)
        
-    @portraits_url = URI.encode("#{Rails.application.secrets.media_host}/api/media/search?q=#{@person.display_name + ',Portrait'}")
+    @portraits_url = URI.encode("#{Rails.application.secrets.media_host}/api/media/search?q=#{@person.display_name + ',Portrait'}&f=match")
     @resp = Net::HTTP.get_response(URI.parse(@portraits_url))
     @portraits = JSON.parse(@resp.body)
     
